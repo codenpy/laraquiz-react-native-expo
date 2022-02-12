@@ -100,6 +100,7 @@ export default function QuizSingle({ route, navigation }) {
   };
 
   useEffect(() => {
+    //setUser(null);
     if (timeEnd) {
       countdownRef.current.start();
     }
@@ -120,7 +121,7 @@ export default function QuizSingle({ route, navigation }) {
 
   if (showResult) {
     return (
-      <Box safeArea py={5} px={4}>
+      <Box py={8} px={4}>
         <Result quizID={quizID} score={score} />
       </Box>
     );
@@ -154,7 +155,7 @@ export default function QuizSingle({ route, navigation }) {
           <HStack
             alignItems="center"
             justifyContent="center"
-            bg="violet.800"
+            bg="darkBlue.700"
             w="20"
             ml="4"
             rounded="full"
@@ -192,7 +193,7 @@ export default function QuizSingle({ route, navigation }) {
           <HStack
             alignItems="center"
             justifyContent="center"
-            bg="violet.800"
+            bg="darkBlue.700"
             w="20"
             rounded="full"
           >
@@ -228,9 +229,9 @@ export default function QuizSingle({ route, navigation }) {
             alignItems="center"
             justifyContent="center"
             mr="4"
-            bg="violet.800"
+            bg="darkBlue.700"
             rounded="full"
-            p="2"
+            w="20"
           >
             <Center
               _text={{
@@ -247,7 +248,7 @@ export default function QuizSingle({ route, navigation }) {
         <Heading fontSize="xl" p="2" pt="10" textAlign={"center"}>
           {questions[currentQuestion].question}
         </Heading>
-        <VStack space={8} pt={10} alignItems="center">
+        <VStack space={5} pt={10} alignItems="center">
           {questions[currentQuestion].options
             .sort(() => Math.random() - 0.5)
             .map((option, i) => (

@@ -22,16 +22,15 @@ import {
   Badge,
 } from "native-base";
 
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import Spinner from "react-native-loading-spinner-overlay";
-
+import Spinner from "react-native-loading-spinner-overlay/lib";
+import { Toast } from "native-base";
 import { BASE_URL } from "@env";
 
 //console.log(BASEURL)
 
 export default function UserRegistration({ navigation }) {
-  const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [validator, setValidator] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -63,20 +62,21 @@ export default function UserRegistration({ navigation }) {
         } else {
           //console.log('PASSED',response.data.message)
           setValidator({});
-          setTimeout(function () {
-            toast.show({
-              title: response.data.message,
-              placement: "bottom",
-              backgroundColor: "green.700",
-            });
-          }, 3000);
-
+          Toast.show({
+            title: response.data.message,
+            placement: "bottom",
+            backgroundColor: "green.700",
+          });
           setLoading(false);
+          navigation.navigate("Login");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
+        Alert.alert("Something went wrong");
       });
+
+    setLoading(false);
   };
 
   return (
@@ -190,11 +190,6 @@ export default function UserRegistration({ navigation }) {
             />
           )}
 
-          <Spinner
-            //visibility of Overlay Loading Spinner
-            visible={loading}
-          />
-
           <Button
             style={{ borderRadius: 50 }}
             _text={{ fontSize: "xl" }}
@@ -203,6 +198,12 @@ export default function UserRegistration({ navigation }) {
           >
             SIGN UP
           </Button>
+          {loading && (
+            <Spinner
+              //visibility of Overlay Loading Spinner
+              visible={loading}
+            />
+          )}
         </Stack>
       </VStack>
     </Box>

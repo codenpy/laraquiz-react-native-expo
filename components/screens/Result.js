@@ -27,20 +27,21 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import Spinner from "react-native-loading-spinner-overlay";
+import * as SecureStore from "expo-secure-store";
 
 import { BASE_URL } from "@env";
 import { AuthContext } from "../AuthProvider";
 
 export default function Result({ quizID, score }) {
-  const { user, setUser, login, logout } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
-  const [totalScore, setTotalScore] = useState(null);
+  const [totalScore, setTotalScore] = useState(0);
   const [quizInfo, setQuizInfo] = useState({});
 
   useEffect(() => {
-    //axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
     axios
       .post(`${BASE_URL}/api/result/add-result`, {
         quiz_id: quizID,
@@ -86,7 +87,7 @@ export default function Result({ quizID, score }) {
 
   return (
     <>
-      <Box>
+      <Box safeArea>
         <Heading fontSize="lg" textAlign={"center"}>
           You scored {totalScore} out of {result.length}
         </Heading>
@@ -114,7 +115,7 @@ export default function Result({ quizID, score }) {
         <FlatList
           data={result}
           renderItem={({ item, index }) => (
-            <Box borderBottomWidth="1" borderColor="coolGray.200" my="3">
+            <Box my="3">
               <HStack space={3} justifyContent="space-between">
                 <VStack>
                   <Text color="coolGray.800" bold fontSize="md">
@@ -124,6 +125,7 @@ export default function Result({ quizID, score }) {
                   {result[index].options.map((option, i) => (
                     <Badge
                       key={i}
+                      width="220"
                       colorScheme={
                         result[index].correct === option ? "success" : "danger"
                       }

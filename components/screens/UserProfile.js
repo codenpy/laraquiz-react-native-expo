@@ -10,64 +10,51 @@ import {
   Button,
   Select,
   CheckIcon,
+  Heading,
+  Center,
 } from "native-base";
-import Spinner from "react-native-loading-spinner-overlay";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 import axios from "axios";
 import { BASE_URL } from "@env";
 import { AuthContext } from "../AuthProvider";
 
 import * as SecureStore from "expo-secure-store";
 
-const userSingleURL = `${BASE_URL}/api/user`;
-
 export default function UserProfile({ route, navigation }) {
   const { user, setUser } = useContext(AuthContext);
 
   /* Get the route param */
-  const { userID } = route.params;
+  //const { userID } = route.params;
 
   const toast = useToast();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [validator, setValidator] = useState({});
 
   // form states
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
-  const [city, setCity] = useState("");
-  const [gender, setGender] = useState("");
+  const [studentId, setStudentId] = useState("");
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-    axios
-      .get(`${BASE_URL}/api/user/${userID}/edit`)
-      .then((response) => {
-        setName(response.data.user.name);
-        setPhone(response.data.user.phone);
-        setEmail(response.data.user.email);
-        setDob(response.data.user.dob);
-        setCity(response.data.user.city);
-        setGender(response.data.user.gender);
-
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-      });
+    //SecureStore.deleteItemAsync("userToken");
+    if (user) {
+      setName(user.userObj.name);
+      setPhone(user.userObj.phone);
+      setEmail(user.userObj.email);
+      setStudentId(user.userObj.student_id);
+    }
   }, []);
 
   const onProfileUpdateButtonClicked = async () => {
     setLoading(true);
     axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
     const result = await axios
-      .put(`${BASE_URL}/api/user/${userID}`, {
+      .put(`${BASE_URL}/api/user/${user.userObj.id}`, {
         name,
         email,
         phone,
-        gender,
-        dob,
-        city,
+        studentId,
       })
       .then((response) => {
         //console.log(response.data.success)
@@ -87,15 +74,18 @@ export default function UserProfile({ route, navigation }) {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
       });
     setLoading(false);
   };
 
   return (
     <>
-      <Box flex={1} bg="#fff">
-        <VStack space="2.5" mt="2">
+      <Box safeArea>
+        <Center>
+          <Heading size="md">Edit Profile</Heading>
+        </Center>
+        <VStack space="2.5" mt="8">
           <Stack
             space={3}
             ml={10}
@@ -146,65 +136,34 @@ export default function UserProfile({ route, navigation }) {
               />
             )}
 
-            {validator.email ? (
-              <FormControl isInvalid>
-                <Input
-                  onChangeText={setEmail}
-                  value={email}
-                  size="sm"
-                  placeholder="Email"
-                  autoCapitalize="none"
-                />
-                <FormControl.ErrorMessage>
-                  {validator.email}
-                </FormControl.ErrorMessage>
-              </FormControl>
-            ) : (
-              <Input
-                onChangeText={setEmail}
-                value={email}
-                size="sm"
-                placeholder="Email"
-                autoCapitalize="none"
+            <Input
+              onChangeText={setEmail}
+              value={email}
+              size="sm"
+              placeholder="Email"
+              autoCapitalize="none"
+            />
+
+            <Input
+              onChangeText={setStudentId}
+              value={studentId}
+              size="sm"
+              placeholder="ID"
+              autoCapitalize="none"
+            />
+
+            {loading && (
+              <Spinner
+                //visibility of Overlay Loading Spinner
+                visible={loading}
               />
             )}
 
-            <Input
-              onChangeText={setDob}
-              value={dob}
-              size="sm"
-              placeholder="Date of Birth"
-            />
-
-            <Select
-              selectedValue={gender}
-              minWidth="200"
-              accessibilityLabel="Choose Gender"
-              placeholder="Choose Gender"
-              _selectedItem={{
-                bg: "teal.600",
-                endIcon: <CheckIcon size="5" />,
-              }}
-              mt={1}
-              onValueChange={(itemValue) => setGender(itemValue)}
+            <Button
+              bg="blueGray.700"
+              my={5}
+              onPress={onProfileUpdateButtonClicked}
             >
-              <Select.Item label="Male" value="Male" />
-              <Select.Item label="Female" value="Female" />
-            </Select>
-
-            <Input
-              onChangeText={setCity}
-              value={city}
-              size="sm"
-              placeholder="City"
-            />
-
-            <Spinner
-              //visibility of Overlay Loading Spinner
-              visible={loading}
-            />
-
-            <Button my={5} onPress={onProfileUpdateButtonClicked}>
               Update Profile
             </Button>
 

@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         error,
         login: (phone, password) => {
+          //console.log("login button pressed");
           axios
             .post(`${BASE_URL}/api/login`, {
               phone,
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
                   userObj: response.data.user,
                   token: response.data.userToken,
                 };
+
                 setUser(userResponse);
                 SecureStore.setItemAsync(
                   "userToken",
@@ -51,8 +53,7 @@ export const AuthProvider = ({ children }) => {
             })
             .catch((error) => {
               console.log("error AuthProvider login");
-              const key = Object.keys(error.response.data.errors)[0];
-              setError(error.response.data.errors[key][0]);
+              setError(error.response.data);
             });
         },
         logout: () => {
@@ -60,13 +61,14 @@ export const AuthProvider = ({ children }) => {
             "Authorization"
           ] = `Bearer ${user.token}`;
           axios
-            .post("/api/logout")
+            .post(`${BASE_URL}/api/logout`)
             .then((response) => {
               setUser(null);
               SecureStore.deleteItemAsync("userToken");
+              console.log(response.data.message);
             })
             .catch((error) => {
-              console.log(error.response);
+              console.log(error.response.data);
             });
         },
       }}

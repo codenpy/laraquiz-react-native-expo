@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 
 import {
@@ -23,17 +23,13 @@ import {
 
 import { ActivityIndicator, ImageBackground } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import Spinner from "react-native-loading-spinner-overlay";
 
 import { AuthContext } from "../AuthProvider";
-
-import { BASE_URL } from "@env";
 
 export default function Login({ navigation }) {
   // Context API
   const { login, error } = useContext(AuthContext);
 
-  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
 
   // form states
@@ -69,7 +65,7 @@ export default function Login({ navigation }) {
             fontWeight="medium"
             size="xs"
           >
-            Sign in to your account with your mobile or email!
+            Sign in to your account with your phone number!
           </Heading>
         </Box>
 

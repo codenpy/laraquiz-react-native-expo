@@ -1,5 +1,4 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
 import {
   extendTheme,
   Container,
@@ -11,15 +10,11 @@ import {
 
 import { AuthProvider } from "./components/AuthProvider";
 import Routes from "./components/Routes";
-import { LinearGradient } from "expo-linear-gradient";
 
 // Define the config
 const config = {
   useSystemColorMode: false,
   initialColorMode: "white",
-  dependencies: {
-    "linear-gradient": LinearGradient,
-  },
 };
 
 // extend the theme

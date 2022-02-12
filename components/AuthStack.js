@@ -12,16 +12,15 @@ export default function AuthStack() {
   return (
     <Stack.Navigator>
       {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} /> */}
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="UserRegistration"
         component={UserRegistration}
         options={{ title: "Registration" }}
-      />
-      <Stack.Screen
-        name="DoctorRegistration"
-        component={DoctorRegistration}
-        options={{ title: "Doctor Registration" }}
       />
     </Stack.Navigator>
   );

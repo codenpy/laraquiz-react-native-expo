@@ -16,78 +16,71 @@ import {
   Heading,
 } from "native-base";
 import { ImageBackground, Pressable, SafeAreaView } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { AuthContext } from "../AuthProvider";
 
 import * as SecureStore from "expo-secure-store";
 
 import { BASE_URL } from "@env";
-
-const userURL = `${BASE_URL}/api/user`;
+import Quiz from "./Quiz";
+import UserProfile from "./UserProfile";
 
 export default function UserDashboard({ navigation }) {
   const { user, setUser, logout } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-
-  //   axios
-  //     .get(userURL)
-  //     .then((response) => {
-  //       setName(response.data.name);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.response);
-  //     });
-  // }, []);
+  //const Drawer = createDrawerNavigator();
 
   return (
-    <>
-      <StatusBar backgroundColor="#3700B3" barStyle="light-content" />
-      <Box safeArea flex={1} bg="#fff">
-        <HStack
-          //bg="primary.500"
-          px="5"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <HStack space="4" alignItems="center">
-            <Image
-              source={{
-                uri: "https://i.imgur.com/J7BM7hJ.png",
-              }}
-              alt="logo"
-              size="md"
-              style={{ resizeMode: "contain" }}
-            />
-          </HStack>
-          <HStack space="2"></HStack>
-          <HStack space="4" alignItems="center">
-            <Pressable
-              onPress={() => {
-                console.log("user profile clicked");
-              }}
-            >
-              <Avatar bg="indigo.500" alignSelf="center" size="sm">
-                N
-              </Avatar>
-            </Pressable>
-          </HStack>
+    <Box safeArea>
+      <HStack
+        //bg="primary.500"
+        px="5"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <HStack space="4" alignItems="center">
+          <Image
+            source={{
+              uri: "https://i.imgur.com/J7BM7hJ.png",
+            }}
+            alt="logo"
+            size="md"
+            style={{ resizeMode: "contain" }}
+          />
         </HStack>
-        <Center flex={1}>
-          <Heading
-            mt="1"
-            style={{ textAlign: "center" }}
-            color="coolGray.600"
-            fontWeight="medium"
-            size="xl"
+
+        <HStack space="4" alignItems="center">
+          <Pressable
+            onPress={() => {
+              navigation.navigate("UserProfile");
+            }}
           >
-            User Dashboard
-          </Heading>
-          <Heading mt="1" fontWeight="medium" size="md">
-            Name: {user.userObj.name}
-          </Heading>
-        </Center>
-      </Box>
-    </>
+            <Avatar bg="indigo.500" alignSelf="center" size="md">
+              N
+            </Avatar>
+          </Pressable>
+        </HStack>
+      </HStack>
+      <Center>
+        <Heading
+          mt="10"
+          style={{ textAlign: "center" }}
+          color="coolGray.600"
+          fontWeight="medium"
+          size="xl"
+        >
+          User Dashboard
+        </Heading>
+        <Heading mt="1" fontWeight="medium" size="md">
+          Name: {user.userObj.name}
+        </Heading>
+        <Heading mt="1" fontWeight="medium" size="md">
+          Email: {user.userObj.email}
+        </Heading>
+        <Heading mt="1" fontWeight="medium" size="md">
+          Student ID: {user.userObj.student_id}
+        </Heading>
+      </Center>
+    </Box>
   );
 }
