@@ -29,6 +29,7 @@ import { Timer, Countdown } from "react-native-element-timer";
 import { BASE_URL } from "@env";
 import Result from "./Result";
 import { AuthContext } from "../AuthProvider";
+import ShowResultComp from "./ShowResultComp";
 
 export default function QuizSingle({ route, navigation }) {
   const { user, setUser, login, logout } = useContext(AuthContext);
@@ -48,7 +49,7 @@ export default function QuizSingle({ route, navigation }) {
   const [bgColor, setBgColor] = useState("darkBlue.700");
 
   useEffect(() => {
-    //axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
     axios
       .get(`${BASE_URL}/api/quiz/${quizID}/edit`)
       // .get("https://opentdb.com/api.php?amount=3&type=multiple")
@@ -75,9 +76,10 @@ export default function QuizSingle({ route, navigation }) {
         setScore(score + 1);
       }
 
-      //questions.push({ clicked: option });
       axios
         .put(`${BASE_URL}/api/quiz-option-selected/${questionID}`, {
+          user_id: user.userObj.id,
+          quiz_id: quizID,
           selected_option: option,
         })
         .then((response) => {
@@ -120,10 +122,13 @@ export default function QuizSingle({ route, navigation }) {
   }
 
   if (showResult) {
+    // navigation.navigate("UserStack", {
+    //   screen: "UserTakenQuizResult",
+    //   params: { quizID: quizID, score: score },
+    // });
+
     return (
-      <Box py={8} px={4}>
-        <Result quizID={quizID} score={score} />
-      </Box>
+      <ShowResultComp navigation={navigation} quizID={quizID} score={score} />
     );
   }
 

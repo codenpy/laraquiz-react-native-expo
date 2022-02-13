@@ -25,7 +25,7 @@ import { AuthContext } from "../AuthProvider";
 export default function Quiz({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
 
-  const [quizes, setQuizes] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const data = [
@@ -55,7 +55,7 @@ export default function Quiz({ navigation }) {
       .get(`${BASE_URL}/api/quiz`)
       .then((response) => {
         //console.log(response.data.quizes);
-        setQuizes(response.data.quizes);
+        setQuizzes(response.data.quizzes);
         setLoading(false);
       })
       .catch((error) => {
@@ -75,15 +75,12 @@ export default function Quiz({ navigation }) {
   return (
     <>
       <Box>
-        {quizes.length ? (
+        {quizzes.length ? (
           <FlatList
-            data={quizes}
+            data={quizzes}
             renderItem={({ item }) => (
               <Box
                 borderBottomWidth="1"
-                _dark={{
-                  borderColor: "gray.600",
-                }}
                 borderColor="coolGray.200"
                 pl="4"
                 pr="5"

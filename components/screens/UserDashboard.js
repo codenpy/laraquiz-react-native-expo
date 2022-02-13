@@ -52,7 +52,8 @@ export default function UserDashboard({ navigation }) {
         <HStack space="4" alignItems="center">
           <Pressable
             onPress={() => {
-              navigation.navigate("UserProfile");
+              //setUser(null);
+              navigation.navigate("UserTakenQuiz");
             }}
           >
             <Avatar bg="indigo.500" alignSelf="center" size="md">

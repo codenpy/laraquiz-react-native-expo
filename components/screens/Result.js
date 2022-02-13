@@ -58,7 +58,7 @@ export default function Result({ quizID, score }) {
   }, []);
 
   useEffect(() => {
-    //axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
     axios
       .get(
         `${BASE_URL}/api/result?quiz_id=${quizID}&user_id=${user.userObj.id}`

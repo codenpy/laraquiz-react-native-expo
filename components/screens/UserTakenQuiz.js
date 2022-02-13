@@ -22,19 +22,18 @@ import { BASE_URL } from "@env";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { AuthContext } from "../AuthProvider";
 
-export default function UserResults({ navigation }) {
+export default function UserTakenQuiz({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
 
-  const [quizes, setQuizes] = useState([]);
+  const [userTakenquizes, setUserTakenquizes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
     axios
-      .get(`${BASE_URL}/api/user-results/${user.userObj.id}`)
+      .get(`${BASE_URL}/api/user-taken-quiz/${user.userObj.id}`)
       .then((response) => {
-        //console.log(response.data.quizes);
-        setQuizes(response.data.quizes);
+        setUserTakenquizes(response.data.quizzes);
         setLoading(false);
       })
       .catch((error) => {
@@ -54,9 +53,9 @@ export default function UserResults({ navigation }) {
   return (
     <>
       <Box>
-        {quizes.length ? (
+        {userTakenquizes.length ? (
           <FlatList
-            data={quizes}
+            data={userTakenquizes}
             renderItem={({ item }) => (
               <Box
                 borderBottomWidth="1"
@@ -70,22 +69,32 @@ export default function UserResults({ navigation }) {
               >
                 <Pressable
                   onPress={() => {
-                    navigation.navigate("QuizSingle", {
+                    navigation.navigate("UserTakenQuizResult", {
                       quizID: item.id,
+                      score: item.score,
                     });
                   }}
                 >
                   <HStack space={3} justifyContent="space-between">
                     <VStack>
-                      <Text
-                        _dark={{
-                          color: "warmGray.50",
-                        }}
-                        color="coolGray.800"
-                        bold
-                        fontSize={15}
-                      >
+                      <Text color="coolGray.800" bold fontSize={15}>
                         {item.name}
+                      </Text>
+                      <Text color="coolGray.800" bold fontSize={13}>
+                        Score: {item.score} out of {item.total_question}{" "}
+                        {item.score < item.passing_score ? (
+                          <Text fontSize="13" color="red.500" letterSpacing={3}>
+                            FAILED
+                          </Text>
+                        ) : (
+                          <Text
+                            fontSize="13"
+                            color="green.500"
+                            letterSpacing={3}
+                          >
+                            PASSED
+                          </Text>
+                        )}
                       </Text>
                     </VStack>
                     <Spacer />
@@ -97,7 +106,7 @@ export default function UserResults({ navigation }) {
                       color="coolGray.800"
                       alignSelf="flex-start"
                     >
-                      {Moment(item.created_at).format("DD-MM-YYYY")}
+                      {Moment(item.quiz_taken_time).format("DD-MM-YYYY")}
                     </Text>
                   </HStack>
                 </Pressable>

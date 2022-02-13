@@ -7,6 +7,9 @@ import UserProfile from "./screens/UserProfile";
 import { AuthContext } from "./AuthProvider";
 import Quiz from "./screens/Quiz";
 import QuizSingle from "./screens/QuizSingle";
+import UserTakenQuiz from "./screens/UserTakenQuiz";
+import UserTakenQuizResult from "./screens/UserTakenQuizResult";
+import ShowResultComp from "./screens/ShowResultComp";
 
 // Navigation
 const Stack = createNativeStackNavigator();
@@ -31,27 +34,35 @@ function QuizStack() {
 
 function UserStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="UserDashboard">
       <Stack.Screen
         name="UserDashboard"
         component={UserDashboard}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
         name="UserProfile"
         component={UserProfile}
         options={{ title: "Edit Profile" }}
+      />
+      <Stack.Screen
+        name="UserTakenQuiz"
+        component={UserTakenQuiz}
+        options={{ headerShown: true, title: "My quiz test result" }}
+      />
+      <Stack.Screen
+        name="UserTakenQuizResult"
+        component={UserTakenQuizResult}
+        options={{ headerShown: false, title: "All questions and answers" }}
       />
     </Stack.Navigator>
   );
 }
 
 export default function AppStack() {
-  const { user, setUser, logout } = useContext(AuthContext);
-
   return (
     <Tab.Navigator
+      initialRouteName="UserStack"
       screenOptions={{
         tabBarActiveTintColor: "#2B547E",
       }}
