@@ -35,8 +35,6 @@ export default function Routes() {
       });
   }, []);
 
-  //console.log(user);
-
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

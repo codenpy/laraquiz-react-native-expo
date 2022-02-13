@@ -38,22 +38,30 @@ function UserStack() {
       <Stack.Screen
         name="UserDashboard"
         component={UserDashboard}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, unmountOnBlur: true }}
       />
       <Stack.Screen
         name="UserProfile"
         component={UserProfile}
-        options={{ title: "Edit Profile" }}
+        options={{ title: "Edit Profile", unmountOnBlur: true }}
       />
       <Stack.Screen
         name="UserTakenQuiz"
         component={UserTakenQuiz}
-        options={{ headerShown: true, title: "My quiz test result" }}
+        options={{
+          headerShown: true,
+          title: "My quiz test result",
+          unmountOnBlur: true,
+        }}
       />
       <Stack.Screen
         name="UserTakenQuizResult"
         component={UserTakenQuizResult}
-        options={{ headerShown: false, title: "All questions and answers" }}
+        options={{
+          headerShown: false,
+          title: "All questions and answers",
+          unmountOnBlur: true,
+        }}
       />
     </Stack.Navigator>
   );

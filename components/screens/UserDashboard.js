@@ -20,6 +20,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { AuthContext } from "../AuthProvider";
 
 import * as SecureStore from "expo-secure-store";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
 import { BASE_URL } from "@env";
 import Quiz from "./Quiz";
@@ -27,8 +28,35 @@ import UserProfile from "./UserProfile";
 
 export default function UserDashboard({ navigation }) {
   const { user, setUser, logout } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
 
-  //const Drawer = createDrawerNavigator();
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    axios
+      .get(`${BASE_URL}/api/current-user`)
+      .then((response) => {
+        //console.log(response.data);
+        setName(response.data.name);
+        setEmail(response.data.email);
+        setStudentId(response.data.student_id);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <Spinner
+        //visibility of Overlay Loading Spinner
+        visible={loading}
+      />
+    );
+  }
 
   return (
     <Box safeArea>
@@ -127,19 +155,40 @@ export default function UserDashboard({ navigation }) {
               Quiz Test
             </Box>
           </Pressable>
+          <Pressable
+            onPress={() => {
+              setUser(null);
+              logout();
+            }}
+          >
+            <Box
+              bg="blueGray.700"
+              p="5"
+              width="250"
+              rounded="xl"
+              _text={{
+                fontSize: "lg",
+                fontWeight: "medium",
+                color: "warmGray.50",
+                textAlign: "center",
+              }}
+            >
+              Logout
+            </Box>
+          </Pressable>
         </VStack>
         <Box>
           <Heading mt="10" color="coolGray.600" fontWeight="medium" size="xl">
             User Dashboard
           </Heading>
           <Heading mt="1" fontWeight="medium" size="md">
-            Name: {user.userObj.name}
+            Name: {name}
           </Heading>
           <Heading mt="1" fontWeight="medium" size="md">
-            Email: {user.userObj.email}
+            Email: {email}
           </Heading>
           <Heading mt="1" fontWeight="medium" size="md">
-            Student ID: {user.userObj.student_id}
+            Student ID: {studentId}
           </Heading>
         </Box>
       </Center>
