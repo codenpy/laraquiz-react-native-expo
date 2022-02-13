@@ -53,7 +53,7 @@ export default function UserDashboard({ navigation }) {
           <Pressable
             onPress={() => {
               //setUser(null);
-              navigation.navigate("UserTakenQuiz");
+              navigation.navigate("UserProfile");
             }}
           >
             <Avatar bg="indigo.500" alignSelf="center" size="md">
@@ -63,24 +63,85 @@ export default function UserDashboard({ navigation }) {
         </HStack>
       </HStack>
       <Center>
-        <Heading
-          mt="10"
-          style={{ textAlign: "center" }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xl"
-        >
-          User Dashboard
-        </Heading>
-        <Heading mt="1" fontWeight="medium" size="md">
-          Name: {user.userObj.name}
-        </Heading>
-        <Heading mt="1" fontWeight="medium" size="md">
-          Email: {user.userObj.email}
-        </Heading>
-        <Heading mt="1" fontWeight="medium" size="md">
-          Student ID: {user.userObj.student_id}
-        </Heading>
+        <VStack space={4} mt="10">
+          <Pressable
+            onPress={() => {
+              navigation.navigate("UserTakenQuiz");
+            }}
+          >
+            <Box
+              bg="blueGray.700"
+              p="5"
+              width="250"
+              rounded="xl"
+              _text={{
+                fontSize: "lg",
+                fontWeight: "medium",
+                color: "warmGray.50",
+                textAlign: "center",
+              }}
+            >
+              My quiz attempts
+            </Box>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("UserProfile");
+            }}
+          >
+            <Box
+              bg="blueGray.700"
+              p="5"
+              width="250"
+              rounded="xl"
+              _text={{
+                fontSize: "lg",
+                fontWeight: "medium",
+                color: "warmGray.50",
+                textAlign: "center",
+              }}
+            >
+              Profile
+            </Box>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("QuizStack", {
+                screen: "Quiz",
+                initial: false,
+              });
+            }}
+          >
+            <Box
+              bg="blueGray.700"
+              p="5"
+              width="250"
+              rounded="xl"
+              _text={{
+                fontSize: "lg",
+                fontWeight: "medium",
+                color: "warmGray.50",
+                textAlign: "center",
+              }}
+            >
+              Quiz Test
+            </Box>
+          </Pressable>
+        </VStack>
+        <Box>
+          <Heading mt="10" color="coolGray.600" fontWeight="medium" size="xl">
+            User Dashboard
+          </Heading>
+          <Heading mt="1" fontWeight="medium" size="md">
+            Name: {user.userObj.name}
+          </Heading>
+          <Heading mt="1" fontWeight="medium" size="md">
+            Email: {user.userObj.email}
+          </Heading>
+          <Heading mt="1" fontWeight="medium" size="md">
+            Student ID: {user.userObj.student_id}
+          </Heading>
+        </Box>
       </Center>
     </Box>
   );
