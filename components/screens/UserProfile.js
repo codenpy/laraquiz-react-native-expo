@@ -27,7 +27,7 @@ export default function UserProfile({ route, navigation }) {
   //const { userID } = route.params;
 
   const toast = useToast();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [validator, setValidator] = useState({});
 
   // form states
@@ -37,13 +37,20 @@ export default function UserProfile({ route, navigation }) {
   const [studentId, setStudentId] = useState("");
 
   useEffect(() => {
-    //SecureStore.deleteItemAsync("userToken");
-    if (user) {
-      setName(user.userObj.name);
-      setPhone(user.userObj.phone);
-      setEmail(user.userObj.email);
-      setStudentId(user.userObj.student_id);
-    }
+    axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    axios
+      .get(`${BASE_URL}/api/user/${user.userObj.id}/edit`)
+      .then((response) => {
+        setName(response.data.user.name);
+        setPhone(response.data.user.phone);
+        setEmail(response.data.user.email);
+        setStudentId(response.data.user.student_id);
+
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
   }, []);
 
   const onProfileUpdateButtonClicked = async () => {
